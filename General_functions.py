@@ -1062,7 +1062,9 @@ def Potential_Overlap(x1, y1, z1, x2, y2, z2, w1, w2, par_separation):
             diff_mat += (matrix1 - matrix2)**2
             
         diff_mat = np.sqrt(diff_mat + (par_separation/10)**2)
-        R += np.sum(1/diff_mat*w1_temp*w2_temp_matrix)
+        w_sqrt = np.sqrt(np.maximum(w1_temp * w2_temp_matrix, 1e-15))
+        
+        R += np.sum((1.0 / diff_mat) * w_sqrt)
 
     return R
 
