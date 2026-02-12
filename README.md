@@ -8,8 +8,7 @@ This repository contains radial density profiles used to generate the figures in
 - `LocalRho_L3Nh20_profiles.npy`
 
 This is a NumPy `.npy` file that stores one Python dictionary, containing:
-- `profiles`: a dictionary keyed by strings like `L3HaloID{}k{}Nh20S{}`
-- HaloID is the halo identifier, k is the free-streaming cut-off scale, and S is the snapshot number where a profile can be measured.
+- `profiles`: a dictionary keyed by strings like `L3HaloID{}k{}Nh20S{}`. HaloID is the halo identifier, k is the free-streaming cut-off scale, and S is the snapshot number where a profile can be measured.
 
 k list : [7, 10, 12, 20, 24, 30, 35, 50]
 
