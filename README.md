@@ -29,7 +29,7 @@ S ranges from 0 up to maximum 140, depending on the halo and k. Redshift decreas
 
 This repository contains the Python analysis pipeline used to investigate the evolution of prompt cusps in Warm Dark Matter (WDM) halos.
 
-The code processes cosmological simulation data (Gadget/HDF5 format), identifies Lagrangian density peaks, traces particle histories, and fits density profiles to characterize the central structure of dark matter halos.
+The code processes cosmological simulation data (HDF5 format), identifies Lagrangian density peaks, traces particle histories, and fits density profiles to characterize the central structure of dark matter halos.
 
 The analysis is split into several modules, each handling a specific stage of the pipeline.
 
