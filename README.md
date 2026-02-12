@@ -83,10 +83,17 @@ The scripts are designed to be run from the command line, accepting arguments to
 python <script_name>.py <Level> <HaloID> <k_index> <T_min> <T_max> <Nh> <Nf> <Nfile>
 ```
 Arguments:
+
 `Level`: Simulation resolution level.
+
 `HaloID`: ID of the target halo (e.g., 0).
+
 `k_index`: Index selecting the free-streaming scale ($k_{fs}$) from the internal list (controls WDM temperature).
+
 `T_min`, `T_max`: Range of snapshots (time steps) to analyze.
+
 `Nh`: Halo particle number parameter (used in path selection).
+
 `Nf`: File number parameter (used in path selection).
+
 `Nfile`: Location specifier of the snapshot files.
