@@ -25,13 +25,11 @@ S ranges from 0 up to maximum 140, depending on the halo and k. Redshift decreas
 
 - `meta`: metadata such as the halo/k lists and notes
 
-# Warm Dark Matter Halo Analysis Code
+## Warm Dark Matter Halo Analysis Code
 
 This repository contains the Python analysis pipeline used to investigate the evolution of prompt cusps in Warm Dark Matter (WDM) halos.
 
 The code processes cosmological simulation data (Gadget/HDF5 format), identifies Lagrangian density peaks, traces particle histories, and fits density profiles to characterize the central structure of dark matter halos.
-
-## Overview of Scripts
 
 The analysis is split into several modules, each handling a specific stage of the pipeline.
 
@@ -63,7 +61,7 @@ The analysis is split into several modules, each handling a specific stage of th
 
 ---
 
-## Requirements
+### Requirements
 
 The code requires a standard scientific Python environment. Key dependencies include:
 
@@ -75,7 +73,7 @@ The code requires a standard scientific Python environment. Key dependencies inc
 
 ---
 
-## Usage
+### Usage
 
 The scripts are designed to be run from the command line, accepting arguments to specify the simulation run and halo parameters.
 
