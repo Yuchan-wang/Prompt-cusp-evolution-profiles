@@ -406,6 +406,7 @@ for T in range(T_min, T_max+1):
         #                                      par_z_inhalo0, par_linrho_inhalo, par_id_inhalo)
         try:
             npeaks = int(np.max(NPeak_Test[label][1]))
+            Peaks_Properties[label] = npeaks
             grid, id_grid, x_grid_coord, y_grid_coord, z_grid_coord, sizes = Grid_Sizes[label]
             final_list = Peak_List[label]
             print('Found {} peaks in a {} list'.format(npeaks, len(final_list[0, :])))

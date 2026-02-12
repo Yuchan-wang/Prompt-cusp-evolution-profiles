@@ -419,6 +419,7 @@ for T in range(T_min, T_max+1):
         
         normal_peak = colors.Normalize(vmin = 0, vmax = npeak)
 
+        all_pair_scores = []
         for ipeak in range(0, npeak):
             label_peak = '{}P{}'.format(label, ipeak)
             peak_overlap = []
@@ -504,7 +505,22 @@ for T in range(T_min, T_max+1):
                     func_scatter(axs[1], par_x_insub0_temp, par_y_insub0_temp, 
                             Nrand, 0.5, 0.5, c = cm.rainbow(normal(isub)))
                     
-                    inertia = func_inertia(par_x_insub0_temp, par_y_insub0_temp, par_z_insub0_temp)
+                    x_c = par_x_insub0_temp - np.mean(par_x_insub0_temp)
+                    y_c = par_y_insub0_temp - np.mean(par_y_insub0_temp)
+                    z_c = par_z_insub0_temp - np.mean(par_z_insub0_temp)
+                    a_axis = b_axis = c_axis = 1.0
+                    eigenvec_par = np.identity(3)
+
+                    for _ in range(10):
+                        inertia = reduced_inertia(x_c, y_c, z_c, a_axis, b_axis, c_axis, eigenvec_par)
+                        eigenval_par, eigenvec_par = lina.eigh(inertia)
+                        axes = np.sqrt(np.abs(eigenval_par))
+                        c_axis = axes[0]
+                        b_axis = axes[1]
+                        a_axis = axes[2]
+
+
+                    # inertia = reduced_inertia(par_x_insub0_temp, par_y_insub0_temp, par_z_insub0_temp)
                     eigenval_par, eigenvec_par =  lina.eigh(inertia)
                     ca = np.min(eigenval_par)/np.max(eigenval_par)
 
@@ -587,6 +603,7 @@ for T in range(T_min, T_max+1):
                 halo_index.append(isub)
                 
                 SubPeak_Score[label_peaksub] = score
+                all_pair_scores.append((score, ipeak, isub))
                 # print('label_peaksub', score)
 
             # SubPeak_Index[label_peak] = halo_index
@@ -602,6 +619,9 @@ for T in range(T_min, T_max+1):
 
 
             else:
+
+                all_pair_scores.sort(key=lambda x: x[0], reverse=True)
+
                 # axs[7].scatter(peak_index, peak_overlap, color = cm.Greys(normal(isub)), 
                 #                , marker = 'x', s = 100)
                 # axs[2].scatter(peak_index, peak_overlap,
@@ -612,27 +632,42 @@ for T in range(T_min, T_max+1):
                 peak_overlap_available = peak_overlap[peak_available_selection]
                 halo_index_available = halo_index[peak_available_selection]
 
+
+                matched_peaks = set()
+                matched_subs = set()
+                Paired_PeakSub = {}
+
+
                 if nsub_inpeak == 0:
                     color_peak = 'green'
                     
                 else:
-                    peak_insub_index = np.argmax(peak_overlap_available)
-                    score_insub = peak_overlap_available[peak_insub_index]
-                    isub_inpeak = halo_index_available[peak_insub_index]
+                    for score, p_idx, s_idx in all_pair_scores:
+                        if p_idx not in matched_peaks and s_idx not in matched_subs:
+                            matched_peaks.add(p_idx)
+                            matched_subs.add(s_idx)
+                            label_sub_temp = '{}SH{}'.format(label, s_idx)
+                            Paired_PeakSub[label_sub_temp] = p_idx
+                            label_peak_temp = '{}P{}'.format(label, p_idx)
+                            Paired_PeakSub[label_peak_temp] = s_idx
+                    
+                    # peak_insub_index = np.argmax(peak_overlap_available)
+                    # score_insub = peak_overlap_available[peak_insub_index]
+                    # isub_inpeak = halo_index_available[peak_insub_index]
 
-                    Paired_PeakSub[label_peak] = isub_inpeak
-                    label_sub_temp = '{}SH{}'.format(label, isub_inpeak)
-                    try:
-                        existing_pair = Paired_PeakSub[label_sub_temp]
-                        existing_label = '{}P{}SH{}'.format(label, existing_pair, isub_inpeak)
-                        new_label = '{}P{}SH{}'.format(label, ipeak, isub_inpeak)
-                        if SubPeak_Score[existing_label] > SubPeak_Score[new_label]:
-                            pass
-                        else:
-                            Paired_PeakSub[label_sub_temp] = ipeak
-                    except:
-                        Paired_PeakSub[label_sub_temp] = ipeak
-                    print('Found {} and {} as a pair'.format(label_peak, isub_inpeak))
+                    # Paired_PeakSub[label_peak] = isub_inpeak
+                    # label_sub_temp = '{}SH{}'.format(label, isub_inpeak)
+                    # try:
+                    #     existing_pair = Paired_PeakSub[label_sub_temp]
+                    #     existing_label = '{}P{}SH{}'.format(label, existing_pair, isub_inpeak)
+                    #     new_label = '{}P{}SH{}'.format(label, ipeak, isub_inpeak)
+                    #     if SubPeak_Score[existing_label] > SubPeak_Score[new_label]:
+                    #         pass
+                    #     else:
+                    #         Paired_PeakSub[label_sub_temp] = ipeak
+                    # except:
+                    #     Paired_PeakSub[label_sub_temp] = ipeak
+                    # print('Found {} and {} as a pair'.format(label_peak, isub_inpeak))
                     color_peak = 'red'
                     # 
                     # color_sub = 'red'

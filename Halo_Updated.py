@@ -431,7 +431,7 @@ for T in range(T_min, T_max+1):
     npeakmax = np.min([Peaks_Properties[label], npeakmax])
     print('Number of peaks: ', Peaks_Properties[label])
     normal_peak = colors.Normalize(vmin = 0, vmax = npeakmax)
-    for ipeak in range(1, npeakmax+1):
+    for ipeak in range(npeakmax):
         label_peak = '{}P{}'.format(label, ipeak)
         try:
             [centre_maxlinrho_temp, peak_maxlinrho_temp, 
@@ -571,7 +571,7 @@ for T in range(T_min, T_max+1):
     q99_env = np.array(q99_env)
     
     delta0 = np.max(linrho_near_peak)
-    
+
     if len(r_env) > 2:
         A_up, gamma_up = get_powerlaw_envelope(r_env, q99_env, delta0)
         A_lo, gamma_lo = get_powerlaw_envelope(r_env, q01_env, delta0)

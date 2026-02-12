@@ -808,29 +808,42 @@ def func_VelSep(vel_alongr, Nbin):
     return bin_mid, hist, bin_mid[index_]
 
 def reduced_inertia(x_r, y_r, z_r, a, b, c, eigenvector):
-    I = np.zeros((3, 3))
-    transfer = np.transpose(eigenvector)
+    # I = np.zeros((3, 3))
+    # transfer = np.transpose(eigenvector)
 
-    N_par = len(x_r)
-    coor_original = np.zeros((3, N_par))
-    coor_original[0, :] = x_r
-    coor_original[1, :] = y_r
-    coor_original[2, :] = z_r
-    coor_trans = np.matmul(transfer, coor_original)
+    # N_par = len(x_r)
+    # coor_original = np.zeros((3, N_par))
+    # coor_original[0, :] = x_r
+    # coor_original[1, :] = y_r
+    # coor_original[2, :] = z_r
+    # coor_trans = np.matmul(transfer, coor_original)
     
-    R2 = coor_trans[0, :]**2/a**2 + coor_trans[1, :]**2/b**2 + coor_trans[2, :]**2/c**2
-    r_selection = R2!=0
-    x_r = x_r[r_selection]
-    y_r = y_r[r_selection]
-    z_r = z_r[r_selection]
-    R2 = R2[r_selection]
+    # R2 = coor_trans[0, :]**2/a**2 + coor_trans[1, :]**2/b**2 + coor_trans[2, :]**2/c**2
+    # r_selection = R2!=0
+    # x_r = x_r[r_selection]
+    # y_r = y_r[r_selection]
+    # z_r = z_r[r_selection]
+    # R2 = R2[r_selection]
     
-    I[0, 0] = np.sum( x_r**2 / R2)
-    I[1, 1] = np.sum( y_r**2 / R2)
-    I[2, 2] = np.sum( z_r**2 / R2)
-    I[0, 1] = I[1, 0] = np.sum( x_r*y_r / R2)
-    I[0, 2] = I[2, 0] = np.sum( x_r*z_r / R2)
-    I[1, 2] = I[2 ,1] = np.sum( y_r*z_r / R2)
+    # I[0, 0] = np.sum( x_r**2 / R2)
+    # I[1, 1] = np.sum( y_r**2 / R2)
+    # I[2, 2] = np.sum( z_r**2 / R2)
+    # I[0, 1] = I[1, 0] = np.sum( x_r*y_r / R2)
+    # I[0, 2] = I[2, 0] = np.sum( x_r*z_r / R2)
+    # I[1, 2] = I[2 ,1] = np.sum( y_r*z_r / R2)
+    coords = np.vstack([x_r, y_r, z_r])
+    transfer = eigenvector.T 
+    coords_rotated = np.dot(transfer, coords)
+
+    R2 = (coords_rotated[0, :] / a)**2 + \
+         (coords_rotated[1, :] / b)**2 + \
+         (coords_rotated[2, :] / c)**2
+    
+    R2[R2 == 0] = 1e-15
+    weights = 1.0 / R2
+    weighted_coords = coords * weights
+    I = np.dot(weighted_coords, coords.T)
+
     return I
 
 def inside_ellipse(x, y, z, a, b, c, eigenvector):
