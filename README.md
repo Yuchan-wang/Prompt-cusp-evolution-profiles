@@ -59,6 +59,9 @@ The analysis is split into several modules, each handling a specific stage of th
 ### 6. `General_functions.py`
 * **Purpose:** A utility library containing shared mathematical and physical functions used across the analysis pipeline.
 
+### 7. `SubHalo_Prog.py`
+
+* **Purpose:** Computes the maximum main-progenitor mass for subhaloes.
 ---
 
 ### Requirements
